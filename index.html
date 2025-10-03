@@ -46,22 +46,35 @@
         <!-- Ingredient Management Section (Add/Edit) -->
         <div class="mb-8 p-5 bg-red-50 rounded-2xl shadow-inner border border-red-200">
             <h2 class="text-xl md:text-2xl font-bold text-red-800 mb-4 flex justify-between items-center">
-                إدارة مكونات العلف (الأسعار والقيم الغذائية)
+                إدارة وتعديل بيانات مكونات العلف (الأسعار والقيم الغذائية)
                 <button onclick="toggleIngredientManager()" class="text-sm bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded-lg">
-                    <span id="toggle-text">إضافة/تعديل المكونات</span>
+                    <span id="toggle-text">إظهار الإدارة</span>
                 </button>
             </h2>
 
             <div id="ingredient-manager" class="mt-4 border-t border-red-200 pt-4 hidden">
                 
-                <!-- Add New/Update Existing Ingredient -->
-                <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3">إضافة مكون جديد أو تحديث بياناته</h3>
+                <!-- Selector for Loading Existing Ingredient -->
+                <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3">تعديل مكون موجود</h3>
+                <div class="mb-4 flex flex-col md:flex-row gap-2">
+                    <select id="select-ingredient-to-load" 
+                            class="flex-grow p-2 border border-red-300 bg-white rounded-lg shadow-sm text-sm" 
+                            onchange="loadIngredientDataForEdit(this.value)">
+                        <option value="">اختر مكون لتحميل بياناته بالكامل...</option>
+                    </select>
+                    <button onclick="clearEditForm()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-xl shadow-md transition duration-200 w-full md:w-auto text-sm">إضافة مكون جديد</button>
+                </div>
+
+                <!-- Form fields (Unified for Add/Edit) -->
+                <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3 border-t border-red-200 pt-4">بيانات المكون الحالي</h3>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <!-- Name -->
                     <div class="col-span-2 md:col-span-5">
-                        <label for="new-ingredient-name" class="block text-xs font-medium text-gray-700">اسم المكون الجديد (مثال: ذرة محلية)</label>
-                        <input type="text" id="new-ingredient-name" placeholder="" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm" oninput="this.value = this.value.toUpperCase()">
+                        <label for="new-ingredient-name" class="block text-xs font-medium text-gray-700">اسم المكون (يجب أن يكون فريداً)</label>
+                        <input type="text" id="new-ingredient-name" placeholder="مثال: ذرة محلية" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm bg-gray-200" oninput="this.value = this.value.toUpperCase()" disabled>
                     </div>
                     
+                    <!-- Required Nutrients -->
                     <div class="text-center">
                         <label class="block text-xs font-medium text-gray-700">البروتين CP % *</label>
                         <input type="number" id="new-cp" placeholder="8.5" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
@@ -78,24 +91,36 @@
                         <label class="block text-xs font-medium text-gray-700">التكلفة Cost $/Ton *</label>
                         <input type="number" id="new-cost" placeholder="150000" step="1" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
                     </div>
+                    
+                    <!-- Optional Nutrients -->
                      <div class="text-center">
                         <label class="block text-xs font-medium text-gray-700">الكالسيوم Ca %</label>
                         <input type="number" id="new-ca" placeholder="0.02" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
                     </div>
+                    <div class="text-center">
+                        <label class="block text-xs font-medium text-gray-700">ألياف CF %</label>
+                        <input type="number" id="new-cf" placeholder="2.2" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
+                    </div>
+                    <div class="text-center">
+                        <label class="block text-xs font-medium text-gray-700">ميثيونين METH %</label>
+                        <input type="number" id="new-meth" placeholder="0.18" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
+                    </div>
+                    <div class="text-center">
+                        <label class="block text-xs font-medium text-gray-700">ميثيونين+سيستين M+C %</label>
+                        <input type="number" id="new-mc" placeholder="0.36" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
+                    </div>
+                    <div class="text-center">
+                        <label class="block text-xs font-medium text-gray-700">فسفور P %</label>
+                        <input type="number" id="new-p" placeholder="0.08" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
+                    </div>
+                    <div class="text-center">
+                        <label class="block text-xs font-medium text-gray-700">لينوليك LINO %</label>
+                        <input type="number" id="new-lino" placeholder="2.2" step="0.01" min="0" class="input-number mt-1 block w-full p-2 border border-gray-300 rounded-lg text-sm text-center">
+                    </div>
                 </div>
                 <div class="mt-4">
                     <p class="text-xs text-gray-500 mb-2">* الحقول بعلامة النجمة إلزامية.</p>
-                    <button onclick="addNewIngredient()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow-md transition duration-200 w-full">إضافة المكون الجديد أو تحديث الحالي</button>
-                </div>
-
-                <!-- Edit Price Only -->
-                <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3 mt-6 border-t border-red-200 pt-4">تعديل سعر مكون حالي</h3>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <select id="edit-ingredient-select" class="flex-grow p-2 border border-gray-300 bg-white rounded-lg shadow-sm text-sm" onchange="loadIngredientPriceForEdit(this.value)">
-                        <option value="">اختر مكون لتعديل سعره...</option>
-                    </select>
-                    <input type="number" id="edit-cost-input" placeholder="السعر الجديد ($/طن)" min="0" step="1" class="input-number p-2 border border-gray-300 rounded-lg text-sm text-center w-full md:w-1/3">
-                    <button onclick="updateIngredientPrice()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-xl shadow-md transition duration-200 w-full md:w-auto">تعديل السعر</button>
+                    <button onclick="saveIngredientChanges()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow-md transition duration-200 w-full">حفظ التغييرات / إضافة مكون جديد</button>
                 </div>
             </div>
         </div>
@@ -194,13 +219,12 @@
         window.feedMix = [];
         window.INGREDIENTS_DATA = {}; 
 
-        // Default Ingredient Data (for initial setup and fallback)
+        // Default Ingredient Data (added all fields for full editing)
         const DEFAULT_INGREDIENTS_DATA = {
             'CORN': { cp: 8.5, me: 3350, cf: 2.2, lys: 0.26, meth: 0.18, mc: 0.36, ca: 0.02, p: 0.08, lino: 2.2, cost: 150000 },
             'WHEAT': { cp: 11.5, me: 3120, cf: 3, lys: 0.31, meth: 0.15, mc: 0.37, ca: 0.05, p: 0.31, lino: 0, cost: 105000 },
             'BARLEY': { cp: 11, me: 2640, cf: 5.5, lys: 0.4, meth: 0.18, mc: 0.42, ca: 0.03, p: 0.17, lino: 0.83, cost: 110000 },
-            'SHEB (Hulls)': { cp: 11.5, me: 2900, cf: 4, lys: 0.33, meth: 0.16, mc: 0.4, ca: 0.05, p: 0.25, lino: 0, cost: 95000 },
-            'FABA BEANS': { cp: 24, me: 2430, cf: 7, lys: 1.5, meth: 0.18, mc: 0.46, ca: 0.11, p: 0, lino: 0, cost: 150000 },
+            'SHEB': { cp: 11.5, me: 2900, cf: 4, lys: 0.33, meth: 0.16, mc: 0.4, ca: 0.05, p: 0.25, lino: 0, cost: 95000 },
             'SOYBEAN MEAL (SBM)': { cp: 44, me: 2230, cf: 7, lys: 2.69, meth: 0.62, mc: 1.28, ca: 0.24, p: 0.65, lino: 4.48, cost: 250000 },
             'CaCO3': { cp: 0, me: 0, cf: 0, lys: 0, meth: 0, mc: 0, ca: 36, p: 0, lino: 0, cost: 7000 },
             'SALT': { cp: 0, me: 0, cf: 0, lys: 0, meth: 0, mc: 0, ca: 0, p: 0, lino: 0, cost: 7000 },
@@ -224,35 +248,42 @@
         // Firestore paths
         const formulaCollectionPath = (userId) => `artifacts/${appId}/users/${userId}/feed_formulas`;
         const ingredientDocPath = (userId) => `artifacts/${appId}/users/${userId}/settings/ingredients`;
+        
+        // Helper to get element by ID
+        const getEl = (id) => document.getElementById(id);
 
         document.addEventListener('DOMContentLoaded', () => {
             initFirebase();
         });
         
         // --- Ingredient Management Functions ---
-
-        function toggleIngredientManager() {
-            const manager = document.getElementById('ingredient-manager');
-            const toggleText = document.getElementById('toggle-text');
+        
+        // **FIX:** Defined directly on window to ensure accessibility from HTML onclick
+        window.toggleIngredientManager = function() {
+            const manager = getEl('ingredient-manager');
+            const toggleText = getEl('toggle-text');
             const isHidden = manager.classList.contains('hidden');
             if (isHidden) {
                 manager.classList.remove('hidden');
                 toggleText.textContent = 'إخفاء الإدارة';
             } else {
                 manager.classList.add('hidden');
-                toggleText.textContent = 'إضافة/تعديل المكونات';
+                toggleText.textContent = 'إظهار الإدارة';
             }
         }
 
         function populateIngredientSelects() {
-            const select = document.getElementById('ingredient-select');
-            const editSelect = document.getElementById('edit-ingredient-select');
+            const selects = [getEl('ingredient-select'), getEl('select-ingredient-to-load')];
+            
+            // Save current selections
+            const currentMixSelected = selects[0].value;
+            const currentEditSelected = selects[1].value;
 
-            // Save current selection to restore it later
-            const currentSelected = select.value;
+            selects.forEach(select => select.innerHTML = '');
 
-            select.innerHTML = '<option value="" disabled selected>اختر مكونًا</option>';
-            editSelect.innerHTML = '<option value="">اختر مكون لتعديل سعره...</option>';
+            // Add placeholder/default options
+            selects[0].innerHTML = '<option value="" disabled selected>اختر مكونًا</option>';
+            selects[1].innerHTML = '<option value="">اختر مكون لتحميل بياناته بالكامل...</option>';
             
             // Sort keys alphabetically for cleaner list
             const sortedKeys = Object.keys(window.INGREDIENTS_DATA).sort();
@@ -262,138 +293,144 @@
                 option.value = key;
                 option.textContent = key;
                 
-                select.appendChild(option.cloneNode(true));
-                editSelect.appendChild(option);
+                selects[0].appendChild(option.cloneNode(true)); // For mix input
+                selects[1].appendChild(option); // For edit form loading
             });
             
-            // Restore selection if possible
-            if (select.querySelector(`option[value="${currentSelected}"]`)) {
-                select.value = currentSelected;
+            // Restore selections
+            if (selects[0].querySelector(`option[value="${currentMixSelected}"]`)) {
+                selects[0].value = currentMixSelected;
+            }
+            if (selects[1].querySelector(`option[value="${currentEditSelected}"]`)) {
+                selects[1].value = currentEditSelected;
             }
         }
 
-        function loadIngredientPriceForEdit(name) {
-            const costInput = document.getElementById('edit-cost-input');
-            if (name && window.INGREDIENTS_DATA[name]) {
-                costInput.value = window.INGREDIENTS_DATA[name].cost;
-            } else {
-                costInput.value = '';
+        window.loadIngredientDataForEdit = function(name) {
+            if (!name) {
+                clearEditForm();
+                return;
             }
+            
+            const data = window.INGREDIENTS_DATA[name];
+            if (!data) {
+                showMessage(`بيانات المكون "${name}" غير متوفرة.`, 'error');
+                clearEditForm();
+                return;
+            }
+
+            // Fill all fields
+            getEl('new-ingredient-name').value = name;
+            getEl('new-ingredient-name').disabled = true; // Prevent changing name during edit
+            getEl('new-ingredient-name').classList.add('bg-gray-200');
+
+            getEl('new-cp').value = data.cp || 0;
+            getEl('new-me').value = data.me || 0;
+            getEl('new-lys').value = data.lys || 0;
+            getEl('new-cost').value = data.cost || 0;
+            
+            getEl('new-ca').value = data.ca || 0;
+            getEl('new-cf').value = data.cf || 0;
+            getEl('new-meth').value = data.meth || 0;
+            getEl('new-mc').value = data.mc || 0;
+            getEl('new-p').value = data.p || 0;
+            getEl('new-lino').value = data.lino || 0;
+            
+            showMessage(`تم تحميل بيانات المكون ${name} للتعديل.`, 'info');
         }
 
-        async function updateIngredientPrice() {
+        window.clearEditForm = function() {
+            getEl('select-ingredient-to-load').value = "";
+            getEl('new-ingredient-name').value = "";
+            getEl('new-ingredient-name').disabled = false; // Enable name input for new component
+            getEl('new-ingredient-name').classList.remove('bg-gray-200');
+
+            getEl('new-cp').value = "";
+            getEl('new-me').value = "";
+            getEl('new-lys').value = "";
+            getEl('new-cost').value = "";
+            
+            getEl('new-ca').value = "";
+            getEl('new-cf').value = "";
+            getEl('new-meth').value = "";
+            getEl('new-mc').value = "";
+            getEl('new-p').value = "";
+            getEl('new-lino').value = "";
+
+            showMessage('النموذج جاهز لإضافة مكون جديد.', 'info');
+        }
+
+
+        window.saveIngredientChanges = async function() {
             if (!isAuthReady || !currentUserId) {
                 showMessage('الرجاء الانتظار حتى يتم تحميل حالة المستخدم.', 'error');
                 return;
             }
 
-            const name = document.getElementById('edit-ingredient-select').value;
-            const newCost = parseFloat(document.getElementById('edit-cost-input').value);
-
+            const name = getEl('new-ingredient-name').value.trim().toUpperCase();
             if (!name) {
-                showMessage('الرجاء اختيار مكون.', 'error');
-                return;
-            }
-            if (isNaN(newCost) || newCost < 0) {
-                showMessage('الرجاء إدخال سعر صحيح وموجب.', 'error');
-                return;
-            }
-
-            // Update local data
-            window.INGREDIENTS_DATA[name].cost = newCost;
-
-            try {
-                const settingsRef = doc(db, ingredientDocPath(currentUserId));
-                // Store the whole updated object stringified
-                await updateDoc(settingsRef, {
-                    ingredients: JSON.stringify(window.INGREDIENTS_DATA)
-                });
-                
-                updateMixWithNewData(); 
-                showMessage(`تم تحديث سعر ${name} إلى ${newCost.toLocaleString()} $`, 'success');
-                // Clear inputs after successful update
-                document.getElementById('edit-cost-input').value = '';
-                document.getElementById('edit-ingredient-select').value = '';
-            } catch (e) {
-                showMessage('خطأ في تعديل السعر.', 'error');
-                console.error("Error updating ingredient price: ", e);
-            }
-        }
-
-        async function addNewIngredient() {
-            if (!isAuthReady || !currentUserId) {
-                showMessage('الرجاء الانتظار حتى يتم تحميل حالة المستخدم.', 'error');
-                return;
-            }
-
-            const name = document.getElementById('new-ingredient-name').value.trim().toUpperCase();
-            if (!name) {
-                showMessage('الرجاء إدخال اسم المكون الجديد.', 'error');
+                showMessage('الرجاء إدخال اسم المكون.', 'error');
                 return;
             }
             
             // Collect nutrient values - required fields
-            const cpVal = parseFloat(document.getElementById('new-cp').value);
-            const meVal = parseFloat(document.getElementById('new-me').value);
-            const lysVal = parseFloat(document.getElementById('new-lys').value);
-            const costVal = parseFloat(document.getElementById('new-cost').value);
+            const cpVal = parseFloat(getEl('new-cp').value);
+            const meVal = parseFloat(getEl('new-me').value);
+            const lysVal = parseFloat(getEl('new-lys').value);
+            const costVal = parseFloat(getEl('new-cost').value);
 
             if (isNaN(cpVal) || isNaN(meVal) || isNaN(lysVal) || isNaN(costVal) || cpVal < 0 || meVal < 0 || lysVal < 0 || costVal < 0) {
                 showMessage('الرجاء إدخال قيم صحيحة وموجبة للبروتين، الطاقة، اللايسين، والتكلفة (الحقول الإلزامية).', 'error');
                 return;
             }
 
-            // Optional nutrients (set to 0 if not provided)
-            const getOptionalValue = (id) => parseFloat(document.getElementById(id).value) || 0;
+            // Optional nutrients (set to 0 if not provided or invalid)
+            const getValidValue = (id) => {
+                const val = parseFloat(getEl(id).value);
+                return (isNaN(val) || val < 0) ? 0 : val;
+            };
 
             const newIngredientData = {
                 cp: cpVal,
                 me: meVal,
                 lys: lysVal,
                 cost: costVal,
-                // Set defaults for other nutrients if not fully entered
-                cf: getOptionalValue('new-cf'), // Added if you decide to include it
-                meth: getOptionalValue('new-meth'), // Added if you decide to include it
-                mc: getOptionalValue('new-mc'), // Added if you decide to include it
-                ca: getOptionalValue('new-ca'),
-                p: getOptionalValue('new-p'), // Added if you decide to include it
-                lino: getOptionalValue('new-lino'), // Added if you decide to include it
+                
+                // All other nutrients
+                cf: getValidValue('new-cf'),
+                meth: getValidValue('new-meth'),
+                mc: getValidValue('new-mc'),
+                ca: getValidValue('new-ca'),
+                p: getValidValue('new-p'),
+                lino: getValidValue('new-lino'),
             };
 
-            // Ensure all keys used in calculation are present
-            const allNutrientKeys = Object.keys(window.NUTRIENT_LABELS).filter(k => k !== 'cost');
-            allNutrientKeys.forEach(key => {
-                if (!(key in newIngredientData)) {
-                    // Use 0 for any key missed in the form but present in the master list
-                    newIngredientData[key] = 0; 
-                }
-            });
-
+            const isNew = !window.INGREDIENTS_DATA.hasOwnProperty(name);
 
             // Update local data
             window.INGREDIENTS_DATA[name] = newIngredientData;
 
             try {
-                // Save updated data to Firestore
+                // Save updated data to Firestore (overwrites existing or creates new document)
                 const settingsRef = doc(db, ingredientDocPath(currentUserId));
                 await setDoc(settingsRef, { ingredients: JSON.stringify(window.INGREDIENTS_DATA) }, { merge: true });
                 
                 // Refresh selects and mix
                 populateIngredientSelects();
                 updateMixWithNewData();
-                showMessage(`تم إضافة/تحديث المكون **${name}** بنجاح!`, 'success');
+                showMessage(`تم ${isNew ? 'إضافة' : 'تحديث'} المكون **${name}** بنجاح!`, 'success');
 
-                // Clear inputs
-                document.getElementById('new-ingredient-name').value = '';
-                document.getElementById('new-cp').value = '';
-                document.getElementById('new-me').value = '';
-                document.getElementById('new-lys').value = '';
-                document.getElementById('new-cost').value = '';
-                document.getElementById('new-ca').value = '';
+                // If updated existing, keep form loaded; if new, clear form
+                if(isNew) {
+                    clearEditForm();
+                } else {
+                    // Re-load data to show updated cost/values in form
+                    loadIngredientDataForEdit(name);
+                }
 
             } catch (e) {
-                showMessage('خطأ في إضافة/تحديث المكون.', 'error');
-                console.error("Error adding/updating ingredient: ", e);
+                showMessage('خطأ في حفظ التغييرات.', 'error');
+                console.error("Error saving ingredient changes: ", e);
             }
         }
         
@@ -401,6 +438,7 @@
             // Update ingredient data in the current feed mix if it exists
             window.feedMix.forEach(item => {
                 if (window.INGREDIENTS_DATA[item.name]) {
+                    // Update the item's data reference
                     item.data = window.INGREDIENTS_DATA[item.name];
                 }
             });
@@ -411,8 +449,8 @@
         async function initFirebase() {
             setLogLevel('Debug');
             if (!firebaseConfig) {
-                document.getElementById('auth-status').textContent = 'Firebase غير متاح. لا يمكن حفظ/تحميل التركيبات أو المكونات.';
-                document.getElementById('formula-controls').classList.add('hidden');
+                getEl('auth-status').textContent = 'Firebase غير متاح. لا يمكن حفظ/تحميل التركيبات أو المكونات.';
+                getEl('formula-controls').classList.add('hidden');
                 console.error("Firebase config is missing. Using default ingredient data.");
                 window.INGREDIENTS_DATA = DEFAULT_INGREDIENTS_DATA;
                 populateIngredientSelects();
@@ -428,7 +466,7 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         currentUserId = user.uid;
-                        document.getElementById('auth-status').textContent = `تم تسجيل الدخول. معرف المستخدم: ${currentUserId}`;
+                        getEl('auth-status').textContent = `تم تسجيل الدخول. معرف المستخدم: ${currentUserId}`;
                         isAuthReady = true;
                         loadCustomIngredientData(currentUserId);
                         setupFormulaListener();
@@ -456,7 +494,7 @@
                     }
                 }
             } catch (error) {
-                document.getElementById('auth-status').textContent = 'خطأ في تهيئة Firebase. لا يمكن حفظ البيانات.';
+                getEl('auth-status').textContent = 'خطأ في تهيئة Firebase. لا يمكن حفظ البيانات.';
                 console.error("Error initializing Firebase:", error);
             }
         }
@@ -506,7 +544,7 @@
         }
 
         function renderSavedFormulas(formulas) {
-            const select = document.getElementById('saved-formulas');
+            const select = getEl('saved-formulas');
             const currentSelected = select.value;
             select.innerHTML = '<option value="">تحميل تركيبة محفوظة...</option>';
             
@@ -528,7 +566,7 @@
                 return;
             }
 
-            const formulaName = document.getElementById('formula-name').value.trim();
+            const formulaName = getEl('formula-name').value.trim();
             if (!formulaName) {
                 showMessage('الرجاء إدخال اسم للتركيبة.', 'error');
                 return;
@@ -550,7 +588,7 @@
             try {
                 await setDoc(formulaRef, formulaData);
                 showMessage(`تم حفظ التركيبة "${formulaName}" بنجاح!`, 'success');
-                document.getElementById('formula-name').value = '';
+                getEl('formula-name').value = '';
             } catch (e) {
                 showMessage('خطأ في الحفظ.', 'error');
                 console.error("Error saving formula: ", e);
@@ -567,8 +605,12 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     // Deserialize the ingredients array
-                    window.feedMix = JSON.parse(data.ingredients);
-                    document.getElementById('formula-name').value = data.name;
+                    window.feedMix = JSON.parse(data.ingredients).map(item => {
+                        // Ensure loaded mix items have current nutrient data
+                        item.data = window.INGREDIENTS_DATA[item.name] || item.data;
+                        return item;
+                    });
+                    getEl('formula-name').value = data.name;
                     calculateAndRender();
                     showMessage(`تم تحميل التركيبة "${data.name}".`, 'success');
                 } else {
@@ -583,8 +625,8 @@
         // --- Core Application Logic ---
 
         window.addIngredient = function() {
-            const select = document.getElementById('ingredient-select');
-            const percentageInput = document.getElementById('percentage-input');
+            const select = getEl('ingredient-select');
+            const percentageInput = getEl('percentage-input');
             const name = select.value;
             const percent = parseFloat(percentageInput.value);
 
@@ -600,7 +642,7 @@
             
             const ingredientData = window.INGREDIENTS_DATA[name];
             if (!ingredientData) {
-                 showMessage(`بيانات المكون "${name}" غير متوفرة.`, 'error');
+                 showMessage(`بيانات المكون "${name}" غير متوفرة. الرجاء تحديثها في قسم الإدارة.`, 'error');
                  return;
             }
 
@@ -648,7 +690,7 @@
             });
 
             // Render Mix Table
-            const mixBody = document.getElementById('mix-table-body');
+            const mixBody = getEl('mix-table-body');
             mixBody.innerHTML = '';
 
             if (window.feedMix.length === 0) {
@@ -669,8 +711,8 @@
             }
 
             // Render Total Percentage and Warning
-            document.getElementById('total-percentage').textContent = `${totalPercentage.toFixed(2)}%`;
-            const warning = document.getElementById('percentage-warning');
+            getEl('total-percentage').textContent = `${totalPercentage.toFixed(2)}%`;
+            const warning = getEl('percentage-warning');
             if (totalPercentage.toFixed(2) !== '100.00' && totalPercentage > 0) {
                 warning.classList.remove('hidden');
             } else {
@@ -678,7 +720,7 @@
             }
             
             // Render Summary Table
-            const summaryBody = document.getElementById('summary-table-body');
+            const summaryBody = getEl('summary-table-body');
             summaryBody.innerHTML = '';
 
             for (const key in totals) {
@@ -706,7 +748,7 @@
 
         // --- Utility Functions ---
         function showMessage(text, type = 'info') {
-            const box = document.getElementById('message-box');
+            const box = getEl('message-box');
             box.textContent = text;
             box.classList.remove('hidden', 'text-red-700', 'text-green-700', 'text-yellow-700', 'bg-red-100', 'bg-green-100', 'bg-yellow-100');
             box.classList.add('p-3', 'rounded-lg', 'mt-3', 'font-medium');
@@ -723,13 +765,6 @@
                 box.classList.add('hidden');
             }, 5000);
         }
-        
-        // Expose management functions globally
-        window.addNewIngredient = addNewIngredient;
-        window.updateIngredientPrice = updateIngredientPrice;
-        window.loadIngredientPriceForEdit = loadIngredientPriceForEdit;
-        window.toggleIngredientManager = toggleIngredientManager;
-        window.calculateAndRender = calculateAndRender;
     </script>
 </body>
 </html>
