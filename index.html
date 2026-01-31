@@ -208,7 +208,14 @@
 
         // Global variables provided by the environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const firebaseConfig = {
+  apiKey: "AIzaSyCLmnBAfUhxigx_Pz4RX0Eh26_yr76DfMA",
+  authDomain: "integral-melody-330922.firebaseapp.com",
+  projectId: "integral-melody-330922",
+  storageBucket: "integral-melody-330922.appspot.com",
+  messagingSenderId: "84285936998",
+  appId: "1:84285936998:web:08db14d13abd192300e4a7"
+};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let db;
@@ -768,3 +775,4 @@
     </script>
 </body>
 </html>
+
