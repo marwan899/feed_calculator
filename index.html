@@ -254,7 +254,7 @@
 
         // Firestore paths
         const formulaCollectionPath = (userId) => `artifacts/${appId}/users/${userId}/feed_formulas`;
-        const globalIngredientsPath = `artifacts/${appId}/global/ingredients`;
+        const ingredientDocPath = (userId) => `artifacts/${appId}/users/${userId}/settings/ingredients`;
         
         // Helper to get element by ID
         const getEl = (id) => document.getElementById(id);
@@ -775,5 +775,6 @@
     </script>
 </body>
 </html>
+
 
 
